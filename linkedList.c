@@ -77,7 +77,8 @@ void removeSong(struct Node** head, char* songName) {
 
     // Case 3: if the song is somewhere in the middle or end
     while (current != NULL) {
-        if (strcmp(current->song.songName, songName) == 0) {  // Fixed extra ')'
+        // check if song name matches one to delete
+        if (strcmp(current->song.songName, songName) == 0) {  
             //change prev node NEXT pointer to skip current
             // song1-> song3 instead of song2
             current->prev->next = current->next;
@@ -91,7 +92,7 @@ void removeSong(struct Node** head, char* songName) {
             free(current);
             return;
         }
-        // move to next node
+        // move to next song to continue searching
         current = current->next;
     }
     
@@ -99,3 +100,61 @@ void removeSong(struct Node** head, char* songName) {
     printf("Song '%s' not found in the playlist\n", songName);
 }
 
+// move to next song
+void playNextSong(struct Node** current){
+    if (*current == NULL){
+        printf("No songs in playlist\n");
+        return;
+    }    
+    if ((*current)->next != NULL){
+        *current = (*current)->next;
+        getCurrentSong(*current);        
+    } else{
+        printf("End of playlist\n");
+    }
+}
+
+// play previous song
+void playPreviousSong(struct Node** current) {
+    if (*current == NULL) {
+        printf("No songs in playlist!\n");
+        return;
+    }
+    if ((*current)->prev != NULL) {
+        *current = (*current)->prev;
+        getCurrentSong(*current);
+    } else {
+        printf("Already at start of playlist!\n");
+    }
+}
+
+// Print entire playlist
+void printPlaylist(struct Node* head) {
+    struct Node* current = head;
+    int songNumber = 1;
+    
+    if (head == NULL) {
+        printf("Playlist is empty!\n");
+        return;
+    }
+    
+    printf("\n=== Current Playlist ===\n");
+    while (current != NULL) {
+        printf("%d. %s - %s\n", 
+               songNumber++, 
+               current->song.songName, 
+               current->song.artist);
+        current = current->next;
+    }
+    printf("=====================\n");
+}
+
+void getCurrentSong(struct Node* current) {
+    if (current == NULL) {
+        printf("No song is currently playing\n");
+        return;
+    }
+    printf("Now Playing: %s by %s\n", 
+           current->song.songName, 
+           current->song.artist);
+}

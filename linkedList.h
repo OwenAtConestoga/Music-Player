@@ -21,4 +21,12 @@ void addSong(struct Node** head, struct Song song);
 
 void removeSong(struct Node** head, char* songName);
 
+void playNextSong(struct Node** current);
+
+void playPreviousSong(struct Node** current);
+
+void printPlaylist(struct Node* head);
+
+void getCurrentSong(struct Node* current);
+
 #endif
