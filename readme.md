@@ -26,5 +26,5 @@ A command-line music playlist manager implemented in C to practice doubly linked
 
 ## How to Run
 ```bash
-gcc musicPlayer.c linkedList.c songs.c -o musicPlayer
+gcc src/*.c -I include -o musicPlayer
 ./musicPlayer
