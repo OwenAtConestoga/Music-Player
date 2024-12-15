@@ -47,5 +47,55 @@ void addSong(struct Node** head, struct Song song){
     }
 }
 
-void removeSong(struct Node** head, char* songName);
+void removeSong(struct Node** head, char* songName) {
+    // Case 1: if the list is empty, there is nothing to remove (no head)
+    if (*head == NULL) {
+        printf("List is empty, no songs to remove\n");
+        return;
+    }
+
+    // node parser
+    struct Node* current = *head;
+
+    // Case 2: if the first node is the one we want to remove
+    /* before
+    Copy[Head] -> [Node1] -> [Node2] -> NULL
+          current
+    After
+    [Head] -> [Node2] -> NULL */
+   
+    if (strcmp(current->song.songName, songName) == 0) {
+        // move head to the next node
+        *head = current->next;
+        // if there was another node
+        if (*head != NULL) {
+            (*head)->prev = NULL;
+        }
+        free(current);
+        return;
+    }
+
+    // Case 3: if the song is somewhere in the middle or end
+    while (current != NULL) {
+        if (strcmp(current->song.songName, songName) == 0) {  // Fixed extra ')'
+            //change prev node NEXT pointer to skip current
+            // song1-> song3 instead of song2
+            current->prev->next = current->next;
+
+            // if not the last node, update prev pointer of next node
+            if (current->next != NULL) {
+                // change next node PREV pointer to skip current
+                // song3->prev song1 instead of song2
+                current->next->prev = current->prev;
+            }
+            free(current);
+            return;
+        }
+        // move to next node
+        current = current->next;
+    }
+    
+    // nothing was found
+    printf("Song '%s' not found in the playlist\n", songName);
+}
 
