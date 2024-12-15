@@ -9,7 +9,7 @@ int getUserChoice(void) {
     while (1) {
         if (fgets(buffer, sizeof(buffer), stdin) != NULL) {
             if (sscanf(buffer, "%d", &choice) == 1) {
-                if (choice >= 1 && choice <= 6) {
+                if (choice >= 1 && choice <= 7) {
                     return choice;
                 }
             }

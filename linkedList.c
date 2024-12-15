@@ -103,28 +103,28 @@ void removeSong(struct Node** head, char* songName) {
 // move to next song
 void playNextSong(struct Node** current){
     if (*current == NULL){
-        printf("No songs in playlist\n");
+        printf("\nNo songs in playlist\n");
         return;
     }    
     if ((*current)->next != NULL){
         *current = (*current)->next;
         getCurrentSong(*current);        
     } else{
-        printf("End of playlist\n");
+        printf("\nEnd of playlist\n");
     }
 }
 
 // play previous song
 void playPreviousSong(struct Node** current) {
     if (*current == NULL) {
-        printf("No songs in playlist!\n");
+        printf("\nNo songs in playlist!\n");
         return;
     }
     if ((*current)->prev != NULL) {
         *current = (*current)->prev;
         getCurrentSong(*current);
     } else {
-        printf("Already at start of playlist!\n");
+        printf("\nAlready at start of playlist!\n");
     }
 }
 
@@ -133,20 +133,20 @@ void printPlaylist(struct Node* head, struct Node* current) {
     int songNumber = 1;
     
     if (head == NULL) {
-        printf("\nPlaylist is empty!\n");
+        printf("\nPlaylist is empty! No songs have been added yet.\n");
         return;
     }
     
-    printf("\n=== Current Playlist ===\n");
+    printf("\n┌──── Playlist ───┐\n");  // Using box drawing characters for nicer formatting
     while (temp != NULL) {
-        printf("%d. %s - %s %s\n", 
+        printf("  %d. %-30s - %-30s %s\n",  // Added width specifiers for consistent spacing
                songNumber++, 
                temp->song.songName, 
                temp->song.artist,
-               (temp == current) ? "▶" : ""); // Show current song with arrow
+               (temp == current) ? "♪" : ""); // Changed to music note symbol
         temp = temp->next;
     }
-    printf("=====================\n");
+    printf("└─────────────────┘\n");
 }
 
 void getCurrentSong(struct Node* current) {
@@ -154,9 +154,11 @@ void getCurrentSong(struct Node* current) {
         printf("No song is currently playing\n");
         return;
     }
-    printf("Now Playing: %s by %s\n", 
+    printf("\n♪ Now Playing ───────────────────────\n");
+    printf("  %s by %s\n", 
            current->song.songName, 
            current->song.artist);
+    printf("───────────────────────────────────\n");
 }
 
 struct PlaylistState* initializePlaylist() {
