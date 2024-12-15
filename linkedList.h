@@ -15,6 +15,6 @@ struct Node {
 
 typedef struct Node node;
 
-void addSong
+
 
 #endif
