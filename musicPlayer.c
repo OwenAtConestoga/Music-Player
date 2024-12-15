@@ -48,13 +48,12 @@ int main() {
                 char songName[100], artist[100];
                 
                 printf("Enter song name: ");
-                while (getchar() != '\n'); // Clear buffer
                 fgets(songName, sizeof(songName), stdin);
                 songName[strcspn(songName, "\n")] = 0; // Remove newline
                 
                 printf("Enter artist: ");
                 fgets(artist, sizeof(artist), stdin);
-                artist[strcspn(artist, "\n")] = 0; // Remove newline
+                artist[strcspn(artist, " ")] = 0; // Remove newline
                 
                 createSong(&newSong, songName, artist);
                 addSong(&playlist->head, newSong); 
@@ -64,8 +63,12 @@ int main() {
                 printPlaylist(playlist->head, playlist->current);
                 break;
             }
-                
-            case 6: // Quit
+            
+                case 6: // Show all songs
+            printPlaylist(playlist->head, playlist->current);
+            break;
+        
+            case 7: // Quit
                 printf("\nThanks for using Music Player!\n");
                 cleanupPlaylist(playlist->head);
                 free(playlist);

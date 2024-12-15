@@ -23,6 +23,8 @@ struct PlaylistState {
 
 typedef struct Node node;
 
+struct PlaylistState* initializePlaylist(void);
+
 void addSong(struct Node** head, struct Song song);
 
 void removeSong(struct Node** head, char* songName);
