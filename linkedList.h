@@ -2,6 +2,8 @@
 #ifndef LINKEDLIST_H
 #define LINKEDLIST_H
 
+#include <stdio.h>
+#include <stdlib.h>  
 #include "songs.h"
 
 struct Node {
@@ -15,6 +17,8 @@ struct Node {
 
 typedef struct Node node;
 
+void addSong(struct Node** head, struct Song song);
 
+void removeSong(struct Node** head, char* songName);
 
 #endif
