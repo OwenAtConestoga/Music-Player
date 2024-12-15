@@ -128,23 +128,23 @@ void playPreviousSong(struct Node** current) {
     }
 }
 
-// Print entire playlist
-void printPlaylist(struct Node* head) {
-    struct Node* current = head;
+void printPlaylist(struct Node* head, struct Node* current) {
+    struct Node* temp = head;
     int songNumber = 1;
     
     if (head == NULL) {
-        printf("Playlist is empty!\n");
+        printf("\nPlaylist is empty!\n");
         return;
     }
     
     printf("\n=== Current Playlist ===\n");
-    while (current != NULL) {
-        printf("%d. %s - %s\n", 
+    while (temp != NULL) {
+        printf("%d. %s - %s %s\n", 
                songNumber++, 
-               current->song.songName, 
-               current->song.artist);
-        current = current->next;
+               temp->song.songName, 
+               temp->song.artist,
+               (temp == current) ? "▶" : ""); // Show current song with arrow
+        temp = temp->next;
     }
     printf("=====================\n");
 }
@@ -158,3 +158,20 @@ void getCurrentSong(struct Node* current) {
            current->song.songName, 
            current->song.artist);
 }
+
+struct PlaylistState* initializePlaylist() {
+    struct PlaylistState* playlist = malloc(sizeof(struct PlaylistState));
+    playlist->head = NULL;
+    playlist->current = NULL;
+    return playlist;
+}
+
+void cleanupPlaylist(struct Node* head) {
+    struct Node* current = head;
+    while (current != NULL) {
+        struct Node* next = current->next;
+        free(current);
+        current = next;
+    }
+}
+

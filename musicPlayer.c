@@ -1,61 +1,76 @@
 #include <stdio.h>
 #include <stdlib.h>
+#include <string.h>
+#include "menu.h"
+#include "songs.h"
+#include "linkedList.h"
+#include "userChoice.h"
 
-#define charSize 100
-
-struct Song {
-    char songName[charSize];
-    char artist[charSize];
-}; 
-
-struct Node {
-    // actual data to be stored
-    struct Song song;
-    // pointer to next node
-    struct Node* next;
-    // pointer to previous node
-    struct Node* prev;
-};
-
-typedef struct Node node;
-
-
-int main(void) {
-
-    // declare songs 
-    struct Song song1 = {"All Time Low", "Jon Bellion"};
-    struct Song song2 = {"Father Time", "Kendrick Lamar"};
-    struct Song song3 = {"Savior", "Rise Against"};
-    struct Song song4 = {"Immortal", "J Cole"};
- 
-    // create nodes
-    struct Node* node1 = (struct Node*)malloc(sizeof(struct Node));
-    struct Node* node2 = (struct Node*)malloc(sizeof(struct Node));
-    struct Node* node3 = (struct Node*)malloc(sizeof(struct Node));
-    struct Node* node4 = (struct Node*)malloc(sizeof(struct Node));
-
-    // dereference nodes to songs
-    node1->song = song1;
-    node2->song = song2;
-    node3->song = song3;
-    node4->song = song4;
-
-    // assign nodes to eachother
-    node1->next = node2;
-    node2->prev = node1;
-
-    node2->next = node3;
-    node3->prev = node2;
-
-    node3->next = node4;
-    node4->prev = node3;
-
-    //cout menu
-    //show current song
-    //play next
-    //play last
-    //end of plalist
-    // cycle through nodes to show they are connected
-    //remove a song
+int main() {
+    struct PlaylistState* playlist = initializePlaylist();
+    int choice;
+    
+    displayWelcome();
+    
+    while (1) {
+        displayMenu();
+        choice = getUserChoice();
+        
+        switch(choice) {
+            case 1: // Show current
+                getCurrentSong(playlist->current);
+                break;
+                
+            case 2: // Next song
+                playNextSong(&playlist->current);
+                break;
+                
+            case 3: // Previous song
+                playPreviousSong(&playlist->current);
+                break;
+                
+            case 4: { // Remove current
+                if (playlist->current != NULL) {
+                    char* songToRemove = playlist->current->song.songName;
+                    struct Node* nextSong = playlist->current->next;
+                    
+                    removeSong(&playlist->head, songToRemove);
+                    playlist->current = nextSong;
+                    if (playlist->current == NULL && playlist->head != NULL) {
+                        playlist->current = playlist->head; // Reset to start if we removed last song
+                    }
+                }
+                break;
+            }
+                
+            case 5: { // Add new song
+                struct Song newSong;
+                char songName[100], artist[100];
+                
+                printf("Enter song name: ");
+                while (getchar() != '\n'); // Clear buffer
+                fgets(songName, sizeof(songName), stdin);
+                songName[strcspn(songName, "\n")] = 0; // Remove newline
+                
+                printf("Enter artist: ");
+                fgets(artist, sizeof(artist), stdin);
+                artist[strcspn(artist, "\n")] = 0; // Remove newline
+                
+                createSong(&newSong, songName, artist);
+                addSong(&playlist->head, newSong); 
+                if (playlist->current == NULL) {
+                    playlist->current = playlist->head;
+                }
+                printPlaylist(playlist->head, playlist->current);
+                break;
+            }
+                
+            case 6: // Quit
+                printf("\nThanks for using Music Player!\n");
+                cleanupPlaylist(playlist->head);
+                free(playlist);
+                return 0;
+        }
+    }
     return 0;
 }
